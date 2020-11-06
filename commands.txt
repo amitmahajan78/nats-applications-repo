@@ -1,0 +1,6 @@
+generate JWT secrets 
+
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdasdsad
+
+
+kubectl patch service/ingress-proxy -n gloo-system -p '{"spec": {"type": "ClusterIP"}}'
