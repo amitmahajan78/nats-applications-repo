@@ -1,3 +1,12 @@
+name: deploy-infra-services
+
+on:
+  push:
+    branches:
+      - infra
+    paths:
+      - "infra/k8s/**"
+
 jobs:
   build:
     runs-on: ubuntu-latest
