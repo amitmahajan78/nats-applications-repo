@@ -12,15 +12,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Installing CIVO cli
       - uses: civo/action-civo
         with:
           token: ${{ secrets.CIVO_TOKEN }}
       - name: Save Civo kubeconfig
-        run: civo kubernetes config ${{ secrets.CLUSTER_NAME }} 
+      - run: civo kubernetes config ${{ secrets.CLUSTER_NAME }} 
       - name: Deploying infrastructure services like ingress, secrets, darabases.
-        run: 
+      - uses: actions/checkout@v2
+      - run: 
           kubectl create namespace nats-dev
           kubectl create -f ingress-srv.yaml -n nats-dev
           kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_KEY }} -n nats-dev
