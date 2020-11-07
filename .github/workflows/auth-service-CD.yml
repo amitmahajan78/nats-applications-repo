@@ -1,0 +1,33 @@
+name: deploy-auth-service
+
+on:
+  push:
+    branches: 
+      - master
+    paths:
+      - 'auth/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd auth && docker build -t amitmahajan/nats-auth-service .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push amitmahajan/nats-auth-service
+      - name: Installing CIVO cli
+        uses: civo/action-civo
+        with:
+          token: ${{ secrets.CIVO_TOKEN }}
+      - name: Save Civo kubeconfig
+        run: civo kubernetes config ${{ secrets.CLUSTER_NAME }} 
+      - name: Deploying auth application with mongodb
+        run: 
+          cd ../infra/k8s
+          kubectl apply -f auth-mongodb.yaml -n nats 
+          kubectl rollout status deployment/auth-mongo-depl
+          kubectl apply -f auth-depl.yaml -n nats 
+          kubectl rollout status deployment/auth-depl
