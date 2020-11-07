@@ -7,13 +7,18 @@ on:
     paths:
       - 'auth/**'
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd auth && docker build -t amitmahajan/nats-auth-service .
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - name: checkout and run the test
+        run: cd auth && npm install && npm run test:ci
+      - name: build docker image and push
+        run: 
+          cd auth && docker build -t amitmahajan/nats-auth-service .
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
