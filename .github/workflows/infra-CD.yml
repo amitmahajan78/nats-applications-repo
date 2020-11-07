@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Installing CIVO cli
-        uses: civo/action-civo
+      - uses: civo/action-civo
         with:
           token: ${{ secrets.CIVO_TOKEN }}
       - name: Save Civo kubeconfig
@@ -23,7 +23,7 @@ jobs:
         run: 
           kubectl create namespace nats-dev
           kubectl create -f ingress-srv.yaml -n nats-dev
-          kubectl create secret generic jwt-secret --from-literal=JWT_KEY={{ secrets.JWT_KEY }} -n nats-dev
+          kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_KEY }} -n nats-dev
           kubectl apply -f auth-mongodb-depl.yaml -n nats-dev 
           kubectl rollout status deployment/auth-mongo-depl -n nats-dev 
           kubectl apply -f expiration-redis-depl.yaml -n nats-dev
