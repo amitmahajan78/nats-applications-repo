@@ -1,4 +1,4 @@
-name: deploy-infra-services-civo
+name: deploy-infra-services
 
 on:
   push:
