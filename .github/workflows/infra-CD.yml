@@ -1,4 +1,4 @@
-name: infrastructure-deployment-workflow
+name: infra-deployment-workflow
 
 on:
   push:
