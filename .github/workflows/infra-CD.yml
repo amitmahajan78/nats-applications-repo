@@ -17,7 +17,7 @@ jobs:
         with:
           token: ${{ secrets.CIVO_TOKEN }}
       - name: Save Civo kubeconfig
-        run: civo kubernetes config ${{ secrets.CLUSTER_NAME }} --save
+        run: civo kubernetes config ${{ secrets.CLUSTER_NAME }} --save --yes
       - name: Deploying infrastructure services like ingress, secrets, darabases.
         run: kubectl create namespace nats-dev
           kubectl create -f ingress-srv.yaml -n nats-dev
