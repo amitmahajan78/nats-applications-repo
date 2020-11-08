@@ -5,7 +5,7 @@ on:
     branches:
       - infra
     paths:
-      - 'infra/k8s/**''
+      - "infra/k8s/**"
 
 jobs:
   build:
