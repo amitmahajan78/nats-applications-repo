@@ -5,7 +5,7 @@ on:
     branches:
       - infra
     paths:
-      - "infra/k8s/**"
+      - 'infra/k8s/**''
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
         with:
           token: ${{ secrets.CIVO_TOKEN }}
       - name: Save Civo kubeconfig
-        run: civo kubernetes config ${{ secrets.CLUSTER_NAME }} --save
+        run: civo kubernetes config ${{ secrets.CLUSTER_NAME }} --save --yes
       - name: Deploying infrastructure services like ingress, secrets, darabases.
         uses: actions/checkout@v2
       - run: kubectl create namespace nats-dev
