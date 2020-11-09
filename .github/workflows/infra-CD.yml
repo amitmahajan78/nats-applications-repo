@@ -1,4 +1,4 @@
-name: infra-deployment-workflow
+name: deploy-infra-srv
 
 on:
   push:
@@ -11,6 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Installing CIVO cli
         uses: civo/action-civo@v1.0.0
         with:
@@ -18,10 +19,9 @@ jobs:
       - name: Save Civo kubeconfig
         run: civo kubernetes config ${{ secrets.CLUSTER_NAME }} --save --yes
       - name: Deploying infrastructure services like ingress, secrets, darabases.
-        uses: actions/checkout@v2
-      - run: kubectl create namespace nats-dev
+        run: kubectl create namespace nats-dev
           kubectl create -f ingress-srv.yaml -n nats-dev
-          kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_KEY }} -n nats-dev
+          kubectl create secret generic jwt-secret --from-literal=JWT_KEY={{ secrets.JWT_KEY }} -n nats-dev
           kubectl apply -f auth-mongodb-depl.yaml -n nats-dev
           kubectl rollout status deployment/auth-mongo-depl -n nats-dev
           kubectl apply -f expiration-redis-depl.yaml -n nats-dev
